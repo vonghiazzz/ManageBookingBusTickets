@@ -201,7 +201,7 @@ from dotenv import load_dotenv
 load_dotenv()
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
-
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 import django_heroku
 django_heroku.settings(locals())
