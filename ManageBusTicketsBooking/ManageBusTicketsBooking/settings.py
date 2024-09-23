@@ -196,6 +196,11 @@ LOGOUT_URL ='logout'
 LOGOUT_REDIRECT_URL='login'
 
 #Login with google
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '298185301392-delrk00209hqf7h34780eebbvj7cjo1e.apps.googleusercontent.com' #10
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET ='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' #12
+from dotenv import load_dotenv
 
+load_dotenv()
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.getenv('GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.getenv('GOOGLE_OAUTH2_SECRET')
+
+import django_heroku
+django_heroku.settings(locals())

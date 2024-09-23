@@ -1,0 +1,6 @@
+# Bỏ qua tệp môi trường
+.env
+
+# Bỏ qua các tệp tạm
+*.pyc
+db.sqlite3
