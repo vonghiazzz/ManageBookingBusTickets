@@ -17,7 +17,7 @@
     
         <!--css-->
         <link rel="stylesheet" style="text/css" href="{%static '/app/css/main.css' %}" rel="stylesheet"/>
-        <link rel="stylesheet" style="text/css" href="{%static '/app/css/chatbox.css' %}" rel="stylesheet"/>
+        {% comment %} <link rel="stylesheet" style="text/css" href="{%static '/app/css/chatbox.css' %}" rel="stylesheet"/> {% endcomment %}
 
         <!--<link rel="stylesheet" href="{% static 'app/css/name.css'%}">-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -159,7 +159,7 @@
         {% block confirm %}{% endblock confirm %}
 
        <!-- Chatbox -->
-    <button class="chatbox-open">
+    {% comment %} <button class="chatbox-open">
       <i class="fa fa-comment fa-2x" aria-hidden="true"></i>
   </button>
   <button class="chatbox-close">
@@ -188,7 +188,7 @@
               <button id="send-button"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
           </aside>
       </footer>
-  </section>
+  </section> {% endcomment %}
 
 
         <!--Footer-->
@@ -205,13 +205,13 @@
           
                   <!-- Right -->
                   <div>
-                    <a href="https://www.facebook.com/tannghia.vo.9" class="me-4 link-secondary">
+                    <a href="" class="me-4 link-secondary">
                       <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="https://www.facebook.com/tannghia.vo.9" class="me-4 link-secondary">
+                    <a href="" class="me-4 link-secondary">
                       <i class="bi bi-twitter"></i>
                     </a>
-                    <a href="https://www.facebook.com/tannghia.vo.9" class="me-4 link-secondary">
+                    <a href="" class="me-4 link-secondary">
                       <i class="bi bi-instagram"></i>
                     </a>
                     <!-- <a href="" class="me-4 link-secondary">
@@ -293,7 +293,7 @@
 <!-- Bootstrap JS -->
 <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+{% comment %} <script>
     $(document).ready(function () {
         $(".chatbox-open").click(function () {
             $(".chatbox-popup, .chatbox-close").fadeIn();
@@ -355,7 +355,7 @@
             $('#message-input').val('');
         }
     });
-</script>
+</script> {% endcomment %}
         
         <script src="" async defer></script>
     </body>

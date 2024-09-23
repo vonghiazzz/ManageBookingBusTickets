@@ -170,7 +170,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'app/static/media')
 
 
 #Upload của ckEditor = MEDIA_ROOT + CKEDITOR_UPLOAD_PATH
-CKEDITOR_UPLOAD_PATH='bus/'
+# CKEDITOR_UPLOAD_PATH='bus/'
+
+
+
 
 
 # Default primary key field type

@@ -12,7 +12,7 @@ from django import forms
 from django.db import IntegrityError, transaction
 import math
 #Cài thêm khi sử dụng CkEditor
-from ckeditor.fields import RichTextField
+# from ckeditor.fields import RichTextField
 
 # Create your models here.
 # itemBase - id - name - start point - end point -bến xe đi - bến xe đến - Departure Date 

@@ -32,7 +32,6 @@
                     <th scope="col">Total Seats</th>
                     <th scope="col">Reserved Seats</th>
                     <th scope="col">Action</th> 
-                    <th scope="col">Report</th>
 
                 </tr>
             </thead>
@@ -50,15 +49,12 @@
                         <td>
                             <a href="{% url 'passengerList' trip.id %}" class="btn btn-primary">View Passengers</a>
                         </td> 
-                        <td>
-                            <a href="{% url 'reportVehicle' trip.id_Buses.id trip.id %}" class="btn btn-primary">Report Vehicle</a>
-                        </td>
 
                     </tr>
                     {% endfor %}
                 {% else %}
                     <tr>
-                        <td colspan="9" class="text-center">No trips available.</td>
+                        <td colspan="8" class="text-center">No trips available.</td>
                     </tr>
                 {% endif %}
             </tbody>

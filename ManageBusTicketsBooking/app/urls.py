@@ -5,6 +5,9 @@ from .admin import admin_site
 
 urlpatterns = [
     path('admin/',admin_site.urls, name="admin"),
+    # path('payment/', views.momo_payment, name='momo_payment'),
+    path('momo_return/', views.momo_return, name='momo_return'),
+
     path('statistics/', views.statistics, name='statistics'),
     # path('statistics/<>', views.statistics, name='statistics'),
 

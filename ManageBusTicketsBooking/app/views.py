@@ -1299,7 +1299,14 @@ def booking(request, trip_id):
         name = request.POST.get('name', '')
         mobile = request.POST.get('mobile', '')
         selected_tickets = request.POST.get('selected_tickets')
-        
+        payment_method = request.POST.get('payment_method')
+
+        total_price = float(request.POST.get('total_price_input', '0'))*25000
+        print("Total Price from POST: ", request.POST.get('total_price_input', 'Not Found'))
+        print("Total Price: ", request.POST.get('total_price', 'Not Found'))
+
+        print("POST data:", request.POST)
+
         try:
             selected_tickets = json.loads(selected_tickets)
             print('selected_tickets: ', selected_tickets)
@@ -1323,18 +1330,14 @@ def booking(request, trip_id):
                 booked_tickets.append(ticket)
 
             # total_price = sum(ticket.idTrip.price for ticket in booked_tickets) - discount_ticket.idTrip.price + discount_price
-
             # Tạo Booking cho tất cả các vé đã chọn
             for ticket in booked_tickets:
                 if customer:
                     # discount_price = 0
                     customer.point += 10
                     if customer.point>=100:
-                    #     discount_price = discount_ticket.idTrip.price * 0.5
-
                         customer.point -= 100
                     customer.save()
-                
                 Booking.objects.create(
                     name_Customer=name,
                     phone_Customer=mobile,
@@ -1346,6 +1349,10 @@ def booking(request, trip_id):
             if user_email:
                 send_email_booking(name, mobile, selected_tickets, user_email)
             point = customer.point if customer else 0
+            print("total_price: ",{total_price})
+            if payment_method == "online_payment":
+                # Prepare MoMo payment data
+                return redirect(generate_momo_payment_url( total_price))  # Redirect to MoMo payment
 
             context = {
                 'name': name,
@@ -1383,6 +1390,9 @@ def booking(request, trip_id):
     }
     return render(request, 'app/customer/booking.html', context)
 
+def momo_return(request):
+    return redirect('home')
+
 
 def send_email_booking(name, mobile, booked_tickets, user_email):
     subject = 'Successful Booking'
@@ -1395,3 +1405,61 @@ def send_email_booking(name, mobile, booked_tickets, user_email):
     except Exception as e:
         print(f'Failed to send email. Error: {str(e)}')
         return False
+import requests
+import uuid
+import hmac
+import hashlib
+def generate_momo_payment_url( amount):
+    endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
+    accessKey = "F8BBA842ECF85"
+    secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
+    orderInfo = "pay with MoMo"
+    partnerCode = "MOMO"
+    redirectUrl = "http://127.0.0.1:8000/momo_return/"
+    ipnUrl = "https://your-ipn-url.com"
+    orderId = str(uuid.uuid4())
+    requestId = str(uuid.uuid4())
+    extraData = ""
+    amount = int(amount) 
+    partnerName = "MoMo Payment"
+    requestType = "payWithMethod"
+    storeId = "Test Store"
+    orderGroupId = ""
+    autoCapture = True
+    lang = "vi"
+
+    rawSignature = f"accessKey={accessKey}&amount={amount}&extraData={extraData}&ipnUrl={ipnUrl}&orderId={orderId}&orderInfo={orderInfo}&partnerCode={partnerCode}&redirectUrl={redirectUrl}&requestId={requestId}&requestType={requestType}"
+    h = hmac.new(bytes(secretKey, 'ascii'), bytes(rawSignature, 'ascii'), hashlib.sha256)
+    signature = h.hexdigest()
+
+    data = {
+        'partnerCode': partnerCode,
+        'orderId': orderId,
+        'partnerName': partnerName,
+        'storeId': storeId,
+        'ipnUrl': ipnUrl,
+        'amount': amount,
+        'lang': lang,
+        'requestType': requestType,
+        'redirectUrl': redirectUrl,
+        'autoCapture': autoCapture,
+        'orderInfo': orderInfo,
+        'requestId': requestId,
+        'extraData': extraData,
+        'signature': signature,
+        'orderGroupId': orderGroupId
+    }
+
+    response = requests.post(endpoint, json=data, headers={'Content-Type': 'application/json'})
+    result = response.json()
+
+    if 'payUrl' in result:
+        return result['payUrl']
+    else:
+        raise Exception(f"MoMo payment error: {result.get('message', 'Unknown error')}")
+
+
+# NGUYEN VAN A
+# 9704 0000 0000 0018
+# 03/07
+# OTP

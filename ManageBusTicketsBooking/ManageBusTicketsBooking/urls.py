@@ -29,7 +29,7 @@ urlpatterns = [
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider') ), 
 
     #CKeditor
-    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')), 
+    # re_path(r'^ckeditor/', include('ckeditor_uploader.urls')), 
 
     
 ]

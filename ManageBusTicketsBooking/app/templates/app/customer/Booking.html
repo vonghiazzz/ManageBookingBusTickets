@@ -116,8 +116,23 @@
                         </div>
                     </div>
                 </div>
+                <fieldset>
+                    <legend>Chọn phương thức thanh toán:</legend>
+                    <label>
+                        <input type="radio" name="payment_method" value="direct_payment" checked>
+                        Thanh toán trực tiếp
+                    </label>
+                    <br>
+                    <label>
+                        <input type="radio" name="payment_method" value="online_payment">
+                        Thanh toán online
+                    </label>
+                    <br>
+                    <input id="form-button" class="btn btn-success btn-block" type="submit" value="Confirm">
+                </fieldset>
                 <hr>
-                <input id="form-button" class="btn btn-success btn-block" type="submit" value="Confirm">
+                <input type="hidden" id="total_price_input" name="total_price_input" value="0">
+                {% comment %} <input id="form-button" class="btn btn-success btn-block" type="submit" value="Confirm"> {% endcomment %}
             </form>
         </div>
     </div>
@@ -180,6 +195,8 @@
         <h5>Discount: $<span id="discount_price">0</span></h5>
 
         <h5>Total: $<span id="total-price">0</span></h5>
+        <input type="hidden" id="discount_input" name="discount" value="0">
+
         <div class="row justify-content-center">
             <div class="col-auto action-link-wrap">
                 <a onclick="history.back(-1)" class="btn btn-outline-primary me-2">
@@ -192,7 +209,7 @@
         </div>
     </div>
 </div>
-
+{% comment %} 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var seats = document.querySelectorAll(".seat");
@@ -257,6 +274,76 @@
                 selectedTicketsInput.setAttribute('type', 'hidden');
                 selectedTicketsInput.setAttribute('name', 'selected_tickets');
                 selectedTicketsInput.setAttribute('value', JSON.stringify(selectedTickets)); // Convert array to JSON string
+                document.getElementById('form').appendChild(selectedTicketsInput);
+            }
+        });
+    });
+</script> {% endcomment %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var seats = document.querySelectorAll(".seat");
+        var selectedTickets = [];
+        var maxSeats = 5;
+        var ticketPrice = {{ trip.price }}; // Giá của một vé
+        var discountPrice = {{ discount_price }}; 
+
+        function updateSeatCount() {
+            var selectedSeats = document.querySelectorAll(".seat.selected");
+            var totalDiscount = 0;
+            var discountTicket = selectedSeats.length * 10 + discountPrice;
+            if (discountTicket >= 100) {
+                totalDiscount = 0.2 * ticketPrice * selectedSeats.length;
+            }
+
+            var totalPrice = selectedSeats.length * ticketPrice - totalDiscount;
+
+            document.getElementById("selected-seats").textContent = selectedSeats.length;
+            document.getElementById("total-price").textContent = totalPrice;
+            document.getElementById("discount_price").textContent = totalDiscount;
+
+            // Update hidden input fields
+            document.getElementById("total_price_input").value = totalPrice;
+            document.getElementById("discount_input").value = totalDiscount;
+        }
+
+        seats.forEach(function(seat) {
+            if (!seat.classList.contains("disabled")) {
+                seat.addEventListener("click", function() {
+                    var ticketId = seat.dataset.ticketId;
+
+                    if (seat.classList.contains("selected")) {
+                        seat.classList.remove("selected");
+                        updateSeatCount();
+                        selectedTickets = selectedTickets.filter(function(id) {
+                            return id !== ticketId;
+                        });
+                    } else {
+                        if (selectedTickets.length < maxSeats) {
+                            seat.classList.add("selected");
+                            updateSeatCount();
+                            selectedTickets.push(ticketId);
+                        } else {
+                            alert("You can select a maximum of 5 seats.");
+                        }
+                    }
+                });
+            }
+        });
+
+        document.getElementById('form').addEventListener('submit', function(event) {
+            updateSeatCount();
+            if (selectedTickets.length < 1) {
+                event.preventDefault();
+                alert("You must select at least 1 seat.");
+            } else {
+                var existingInput = document.querySelector('input[name="selected_tickets"]');
+                if (existingInput) {
+                    existingInput.remove();
+                }
+                var selectedTicketsInput = document.createElement('input');
+                selectedTicketsInput.setAttribute('type', 'hidden');
+                selectedTicketsInput.setAttribute('name', 'selected_tickets');
+                selectedTicketsInput.setAttribute('value', JSON.stringify(selectedTickets));
                 document.getElementById('form').appendChild(selectedTicketsInput);
             }
         });
