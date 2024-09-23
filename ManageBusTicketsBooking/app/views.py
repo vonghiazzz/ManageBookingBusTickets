@@ -1415,7 +1415,7 @@ def generate_momo_payment_url( amount):
     secretKey = "K951B6PE1waDMi640xX08PD3vg6EkVlz"
     orderInfo = "pay with MoMo"
     partnerCode = "MOMO"
-    redirectUrl = "http://127.0.0.1:8000/momo_return/"
+    redirectUrl = "https://smartbus-4b8558a1299d.herokuapp.com/momo_return/"
     ipnUrl = "https://your-ipn-url.com"
     orderId = str(uuid.uuid4())
     requestId = str(uuid.uuid4())
