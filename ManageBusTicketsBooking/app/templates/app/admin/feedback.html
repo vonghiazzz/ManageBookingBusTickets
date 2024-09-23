@@ -17,7 +17,6 @@
                         <th scope="col" class="text-center">Trip</th>
                         <th scope="col" class="text-center">Departure Time</th>
                         <th scope="col" class="text-center">Arrival Time</th>
-                        {% comment %} <th scope="col" class="text-center">Seat Number</th> {% endcomment %}
                         <th scope="col" class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -30,18 +29,13 @@
                         <td class="text-center">{{ item.ticket.idTrip.name }}</td>
                         <td class="text-center">{{ item.ticket.idTrip.departure_Time }}</td>
                         <td class="text-center">{{ item.ticket.idTrip.arrival_Time }}</td>
-                        {% comment %} <td class="text-center">{{ item.ticket.idSeatNumber.seat_number }}</td> {% endcomment %}
                         <td class="text-center">
                             <button onclick="window.location.href='{% url 'feedback' trip_id=item.ticket.idTrip.id %}'" class="btn btn-primary">
                                 Feedback
                             </button>
                         </td>
-                        
-                       
-
                     </tr>
                     {% endif %}
-
                     {% endfor %}
                 </tbody>
             </table>

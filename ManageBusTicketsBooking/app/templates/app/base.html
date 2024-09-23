@@ -17,9 +17,6 @@
     
         <!--css-->
         <link rel="stylesheet" style="text/css" href="{%static '/app/css/main.css' %}" rel="stylesheet"/>
-        {% comment %} <link rel="stylesheet" style="text/css" href="{%static '/app/css/chatbox.css' %}" rel="stylesheet"/> {% endcomment %}
-
-        <!--<link rel="stylesheet" href="{% static 'app/css/name.css'%}">-->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
         <!--Bootstrap 5-->
@@ -105,13 +102,6 @@
                           Welcome!
                           {%endif%}
 
-                          {% comment %} {{request.user.active}} {% endcomment %}
-                          {% comment %} {{request.user.password}} {% endcomment %}
-
-                          {% comment %} {{request.user.username}} {% endcomment %}
-                          {% comment %} {{token}} {% endcomment %}
-                          {% comment %} {{request.session}} {% endcomment %}
-                          {% comment %} {{request.user.first_name}} {% endcomment %}
                       </a>
                       <ul class="dropdown-menu" style="visibility: {{user_login}}" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="{%url 'profile'%}">Profile</a></li>
@@ -134,14 +124,6 @@
                 </div>
               </nav>
         </Header>
-         {% comment %} {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}  {% endcomment %}
-
         <!--main-->
         {% block banner_slider %}{% endblock banner_slider %}
         {% block about_us %}{% endblock about_us %}
@@ -243,18 +225,7 @@
           
                       </div>
           
-                      <!-- <div class="col-md-4 col-lg-4 col-xl-4 mx-auto mb-4 text-center">
-                        <h6 class="text-uppercase fw-bold mb-4">
-                          Products
-                        </h6>
-                        <p>
-                          <a href="search.php?search=women&btnSearch=" class="text-reset " style="text-decoration: none;">Car</a>
-                        </p>
-                        <p>
-                          <a href="search.php?search=man&btnSearch=" class="text-reset" style="text-decoration: none;">Lego</a>
-                        </p>
-                      </div> -->
-          
+                    
                       <div class="col-md-6 col-lg-6 col-xl-6 mx-auto mb-4 text-center">
                         <h6 class="text-uppercase fw-bold mb-4">
                           Contact

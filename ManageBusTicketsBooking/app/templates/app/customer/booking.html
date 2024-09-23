@@ -32,7 +32,7 @@
                         <h3 class="text-uppercase">Choose seat number</h3>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="text-uppercase">Tầng dưới</h5>
+                        <h5 class="text-uppercase">Downstairs</h5>
 
                         <div class="row pt-2 pb-0">
                             {% if tickets %}
@@ -41,8 +41,7 @@
                                     <div class="col-md-4 col-sm-4">
                                         <div class="seat{% if ticket.status %} disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
-                                            {% comment %} <input type="hidden" name="selected_tickets" value="{{ ticket.id }}"> {% endcomment %}
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> 
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -52,7 +51,7 @@
                                     <div class="col-md-4 col-sm-4">
                                         <div class="seat {% if ticket.status %}disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> 
                                         </div>
                                     </div>
                                     {% endif %}
@@ -65,8 +64,7 @@
                                     <div class="col-md-4 col-sm-4 py-2">
                                         <div class="seat{% if ticket.status %} disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
-                                            {% comment %} <input type="hidden" name="selected_tickets" value="{{ ticket.id }}"> {% endcomment %}
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> 
                                         </div>
                                     </div>
                                 {% endif %}
@@ -74,7 +72,7 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <h5 class="text-uppercase">Tầng trên</h5>
+                        <h5 class="text-uppercase">Upper floor</h5>
                         <div class="row pt-2 pb-0">
                             {% if tickets %}
                                 {% for ticket in tickets %}
@@ -82,8 +80,7 @@
                                     <div class="col-md-4 col-sm-4">
                                         <div class="seat{% if ticket.status %} disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
-                                            {% comment %} <input type="hidden" name="selected_tickets" value="{{ ticket.id }}"> {% endcomment %}
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -93,8 +90,7 @@
                                     <div class="col-md-4 col-sm-4">
                                         <div class="seat{% if ticket.status %} disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
-                                            {% comment %} <input type="hidden" name="selected_tickets" value="{{ ticket.id }}"> {% endcomment %}
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> 
                                         </div>
                                     </div>
                                     {% endif %}
@@ -107,8 +103,7 @@
                                     <div class="col-md-4 col-sm-4 py-2">
                                         <div class="seat{% if ticket.status %} disabled{% endif %}" data-ticket-id="{{ ticket.id }}">
                                             <img src="{% static 'media/ticket/2024/04/ghe.jpg' %}" alt="seat icon" style="width:50px">
-                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> <!-- Hiển thị số chỗ ngồi, ví dụ: A01, A02 -->
-                                            {% comment %} <input type="hidden" name="selected_tickets" value="{{ ticket.id }}"> {% endcomment %}
+                                            <span>{{ ticket.idSeatNumber.seat_number }}</span> 
                                         </div>
                                     </div>
                                 {% endif %}
@@ -117,29 +112,26 @@
                     </div>
                 </div>
                 <fieldset>
-                    <legend>Chọn phương thức thanh toán:</legend>
+                    <legend>Choose payment method:</legend>
                     <label>
                         <input type="radio" name="payment_method" value="direct_payment" checked>
-                        Thanh toán trực tiếp
+                        Direct payment
                     </label>
                     <br>
                     <label>
                         <input type="radio" name="payment_method" value="online_payment">
-                        Thanh toán online
+                        Online payment
                     </label>
                     <br>
                     <input id="form-button" class="btn btn-success btn-block" type="submit" value="Confirm">
                 </fieldset>
                 <hr>
                 <input type="hidden" id="total_price_input" name="total_price_input" value="0">
-                {% comment %} <input id="form-button" class="btn btn-success btn-block" type="submit" value="Confirm"> {% endcomment %}
             </form>
         </div>
     </div>
     <div class="col-lg-6">
         <div class="box-element">
-            {% comment %} <a class="btn btn-outline-dark" href="{% url 'home' %}">&#x2190; Back to Home</a> {% endcomment %}
-            {% comment %} <hr> {% endcomment %}
             <h3>Order Summary</h3>
             <hr>
             <div class="cart-row row">
@@ -184,14 +176,7 @@
                 </div>
             </div>
         </div>
-        {% comment %} <div class="row justify-content-start">
-            <div class="col-md-6">
-                <h5>Original Price: $<span id="original-price">{{ original_price }}</span></h5>
-                <h5>Discount: $<span id="discount-price">{{ discount_price }}</span></h5>
-                <h5>Total: $<span id="total-price">{{ total_price }}</span></h5>
-            </div>
-        </div> {% endcomment %}
-        {% comment %} <h5>Discount: $<span id="">{{discount_price}}</span></h5> {% endcomment %}
+        
         <h5>Discount: $<span id="discount_price">0</span></h5>
 
         <h5>Total: $<span id="total-price">0</span></h5>
@@ -209,82 +194,13 @@
         </div>
     </div>
 </div>
-{% comment %} 
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        var seats = document.querySelectorAll(".seat");
-        var selectedTickets = []; // Danh sách các vé đã chọn
-        var maxSeats = 5;
-        var ticketPrice = {{ trip.price }}; // Giá của một vé
-        var discountPrice = {{ discount_price }}; 
-        console.log("discountPrice: ",discountPrice)
-        function updateSeatCount() {
-            var selectedSeats = document.querySelectorAll(".seat.selected");
-            var totalDiscount= 0;
-            var discoutTicket= selectedSeats.length*10+discountPrice;
-            if (discoutTicket >= 100){
-               totalDiscount= 0.2 * ticketPrice *selectedSeats.length;}
 
-            document.getElementById("selected-seats").textContent = selectedSeats.length;
-            document.getElementById("total-price").textContent = selectedSeats.length * ticketPrice -totalDiscount;
-            document.getElementById("discount_price").textContent = totalDiscount;
-
-        }
-
-        seats.forEach(function(seat) {
-            if (!seat.classList.contains("disabled")) {
-                seat.addEventListener("click", function() {
-                    var ticketId = seat.dataset.ticketId; // Lấy ID của ticket từ data attribute
-
-                    if (seat.classList.contains("selected")) {
-                        seat.classList.remove("selected");
-                        updateSeatCount();
-                        // Remove ticket ID from selectedTickets array
-                        selectedTickets = selectedTickets.filter(function(id) {
-                            return id !== ticketId;
-                        });
-                    } else {
-                        if (selectedTickets.length < maxSeats) {
-                            seat.classList.add("selected");
-                            updateSeatCount();
-                            // Add ticket ID to selectedTickets array
-                            selectedTickets.push(ticketId);
-                        } else {
-                            alert("You can select a maximum of 5 seats.");
-                        }
-                    }
-                    //console.log(selectedTickets); // Debugging: check selectedTickets array in console
-                });
-            }
-        });
-
-        document.getElementById('form').addEventListener('submit', function(event) {
-            updateSeatCount();
-            if (selectedTickets.length < 1) {
-                event.preventDefault();
-                alert("You must select at least 1 seat.");
-            } else {
-                // Remove any existing hidden input for selected_tickets
-                var existingInput = document.querySelector('input[name="selected_tickets"]');
-                if (existingInput) {
-                    existingInput.remove();
-                }
-                // Add new hidden input for selected_tickets
-                var selectedTicketsInput = document.createElement('input');
-                selectedTicketsInput.setAttribute('type', 'hidden');
-                selectedTicketsInput.setAttribute('name', 'selected_tickets');
-                selectedTicketsInput.setAttribute('value', JSON.stringify(selectedTickets)); // Convert array to JSON string
-                document.getElementById('form').appendChild(selectedTicketsInput);
-            }
-        });
-    });
-</script> {% endcomment %}
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         var seats = document.querySelectorAll(".seat");
         var selectedTickets = [];
         var maxSeats = 5;
-        var ticketPrice = {{ trip.price }}; // Giá của một vé
+        var ticketPrice = {{ trip.price }}; 
         var discountPrice = {{ discount_price }}; 
 
         function updateSeatCount() {
