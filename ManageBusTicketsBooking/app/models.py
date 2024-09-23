@@ -44,7 +44,7 @@ class User(AbstractUser):
     class Meta: 
         ordering=["id"]
         unique_together=["email"]
-    email = models.EmailField(unique=True)  # Đảm bảo trường email là duy nhất
+    # email = models.EmailField(unique=True)  # Đảm bảo trường email là duy nhất
     phone_Number = models.CharField(max_length=10, null=True, blank=True, validators=[validate_phone_number])
     avatar = models.ImageField(upload_to='uploads/%Y/%m', default=None, null=True, blank=True) 
     # groups = models.ManyToManyField(
