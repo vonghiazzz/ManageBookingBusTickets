@@ -116,10 +116,20 @@ WSGI_APPLICATION = 'ManageBusTicketsBooking.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "c8hk2uuo5x146tsx",
+        "USER": "el75d4uc3tyd8jgn",
+        "PASSWORD": "xoda2243tlat8w6v",
+        "HOST": "l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
+        "PORT": "3306",
     }
 }
 AUTH_USER_MODEL = 'app.User'  
