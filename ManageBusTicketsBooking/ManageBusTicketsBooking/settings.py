@@ -130,8 +130,12 @@ DATABASES = {
         "PASSWORD": "xoda2243tlat8w6v",
         "HOST": "l3855uft9zao23e2.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
         "PORT": "3306",
+        "OPTIONS": {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        },
     }
 }
+
 AUTH_USER_MODEL = 'app.User'  
 
 
