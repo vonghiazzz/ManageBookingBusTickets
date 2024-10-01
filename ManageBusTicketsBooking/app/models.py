@@ -530,3 +530,10 @@ class Feedback(models.Model):
         trip_info = f"Trip {self.idTrip.id}" if self.idTrip else "No Trip"
         user_info = self.user.username if self.user else "Unknown User"
         return f"Feedback for {trip_info} by {user_info}"
+    
+
+def create_customer(backend, user, response, *args, **kwargs):
+    # Kiểm tra xem khách hàng đã tồn tại chưa
+    if not Customer.objects.filter(user=user).exists():
+        # Tạo khách hàng mới
+        Customer.objects.create(user=user)
