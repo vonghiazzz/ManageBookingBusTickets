@@ -549,3 +549,5 @@ def create_customer(backend, user, response, *args, **kwargs):
     # Đăng nhập người dùng sau khi tạo khách hàng
     # Cung cấp tham số backend để Django biết phải sử dụng backend nào
     login(backend.strategy.request, user, backend='social_core.backends.google.GoogleOAuth2')
+
+
