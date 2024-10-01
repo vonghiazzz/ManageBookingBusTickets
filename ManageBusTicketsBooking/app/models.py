@@ -545,5 +545,7 @@ def create_customer(backend, user, response, *args, **kwargs):
             phone_Number=user.phone_Number,
             point=0,  # Đặt giá trị mặc định cho point
         )
-        login(backend.strategy.request, user)
 
+    # Đăng nhập người dùng sau khi tạo khách hàng
+    # Cung cấp tham số backend để Django biết phải sử dụng backend nào
+    login(backend.strategy.request, user, backend='social_core.backends.google.GoogleOAuth2')
