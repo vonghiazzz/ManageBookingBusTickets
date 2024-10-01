@@ -531,6 +531,7 @@ class Feedback(models.Model):
         user_info = self.user.username if self.user else "Unknown User"
         return f"Feedback for {trip_info} by {user_info}"
     
+from django.contrib.auth import login
 
 def create_customer(backend, user, response, *args, **kwargs):
     # Kiểm tra xem khách hàng đã tồn tại chưa
@@ -544,3 +545,5 @@ def create_customer(backend, user, response, *args, **kwargs):
             phone_Number=user.phone_Number,
             point=0,  # Đặt giá trị mặc định cho point
         )
+        login(backend.strategy.request, user)
+
