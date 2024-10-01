@@ -226,6 +226,7 @@ class Trip(ItemBase):
     ('Gas Đắk Nông,12.1910,107.5921', 'Gas Đắk Nông'),
     ('Gas Gia Lai,13.9860,108.4451', 'Gas Gia Lai'),
     ('Gas Kon Tum,14.3506,108.0001', 'Gas Kon Tum'),
+    ('Gas Bà Rịa - Vũng Tàu,10.404679, 107.127252', 'Gas Bà Rịa - Vũng Tàu'),
     ('Gas Hồ Chí Minh,10.8231,106.6297', 'Gas Hồ Chí Minh'),
     ('Gas Bình Dương,11.0072,106.6512', 'Gas Bình Dương'),
     ('Gas Bình Phước,11.5020,106.9498', 'Gas Bình Phước'),
