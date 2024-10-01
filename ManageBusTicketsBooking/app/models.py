@@ -534,6 +534,13 @@ class Feedback(models.Model):
 
 def create_customer(backend, user, response, *args, **kwargs):
     # Kiểm tra xem khách hàng đã tồn tại chưa
-    if not Customer.objects.filter(user=user).exists():
-        # Tạo khách hàng mới
-        Customer.objects.create(user=user)
+    if not Customer.objects.filter(id=user.id).exists():
+        # Tạo khách hàng mới nếu chưa tồn tại
+        Customer.objects.create(
+            id=user.id,
+            username=user.username,
+            email=user.email,
+            avatar=user.avatar,
+            phone_Number=user.phone_Number,
+            point=0,  # Đặt giá trị mặc định cho point
+        )
