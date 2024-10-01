@@ -219,3 +219,4 @@ SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 import django_heroku
 django_heroku.settings(locals())
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'https://smartbus-4b8558a1299d.herokuapp.com/social-auth/complete/google-oauth2/'
