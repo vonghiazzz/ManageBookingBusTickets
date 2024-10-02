@@ -647,9 +647,21 @@ def generate_otp():
 
 def change_password(request):
     if request.user.is_authenticated:
-        form = PasswordChangeForm(request.user)
+        user_not_login = "hidden"
+        user_login = "show"
+        form = PasswordChangeForm(request.user)  # Form dành cho người dùng đã đăng nhập
     else:
-        form = SetPasswordForm(None)
+        user_not_login = "show"
+        user_login = "hidden"
+        form = SetPasswordForm(None)  # Form đặt lại mật khẩu cho người dùng chưa đăng nhập
+
+    # Khởi tạo context để truyền vào template
+    context = {
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'form': form,  # Thêm form vào context
+    }
+
     if request.method == 'POST':
         otp_from_user = request.POST.get('otp', '')
         if otp_from_user:
@@ -666,11 +678,13 @@ def change_password(request):
                             user = User.objects.get(email=email)
                         except User.DoesNotExist:
                             messages.error(request, 'No user is associated with this email.')
-                            return redirect('forrget_password')
+                            return redirect('forget_password')
 
+                    # Đặt lại mật khẩu cho người dùng
                     user.set_password(new_password1)
                     user.save()
 
+                    # Nếu người dùng đã đăng nhập, xác thực lại
                     if request.user.is_authenticated:
                         updated_user = authenticate(username=user.username, password=new_password1)
                         if updated_user is not None:
@@ -678,13 +692,18 @@ def change_password(request):
                     else:                    
                         messages.success(request, 'You have changed your password successfully!')
                         return redirect('login')
+
+                    # Thông báo thành công và điều hướng
                     messages.success(request, 'You have changed your password successfully!')
                     return redirect('profile')
                 else:
                     messages.error(request, 'Passwords do not match.')
             else:
                 messages.error(request, 'Invalid OTP. Please try again.')
-    return render(request, 'app/change_password.html', {'form': form})
+
+    # Trả về trang `change_password.html` với context
+    return render(request, 'app/change_password.html', context)
+
 
 def loginPage(request):
     if request.user.is_authenticated:
