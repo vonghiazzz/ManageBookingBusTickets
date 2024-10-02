@@ -4,38 +4,22 @@ from django.forms import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
-from datetime import timedelta
-from django.db.models.signals import pre_save, m2m_changed, post_save, pre_delete
 from django.dispatch import receiver
 from django.contrib.auth.models import User
-from django import forms
 from django.db import IntegrityError, transaction
 import math
-#Cài thêm khi sử dụng CkEditor
-# from ckeditor.fields import RichTextField
+from django import forms  
+from django.contrib.auth import login
 
-# Create your models here.
-# itemBase - id - name - start point - end point -bến xe đi - bến xe đến - Departure Date 
+
 class ItemBase(models.Model):
     class Meta:
         abstract = True
    
-    # name = models.CharField(max_length=100, null=False, unique=True)
     created_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True) #Lúc chỉnh sửa mới update ngày
-    active = models.BooleanField(default=True) # khi xóa khóa học này thì nó chuyển thành false và ẩn đi chứ không xóa
-    # def __str__(self) :
-    #      return self.name
-
-#ROLE - id - name 
-# class Role(models.Model):
-#     class Meta: 
-#         ordering=["id"]
-#     name =  models.CharField(max_length=100, null=False, unique=True)
-#     def __str__(self):
-#         return self.name
+    update_date = models.DateTimeField(auto_now=True) 
+    active = models.BooleanField(default=True) 
     
-#ACC - id - full name- birthday - address - user name - email - phone - điểm thưởng 
 def validate_phone_number(value):
     if not str(value).isdigit() or len(str(value)) != 10:
         raise ValidationError('Phone number must be 10 digits.')
@@ -44,30 +28,9 @@ class User(AbstractUser):
     class Meta: 
         ordering=["id"]
         unique_together=["email"]
-    # email = models.EmailField(unique=True)  # Đảm bảo trường email là duy nhất
     phone_Number = models.CharField(max_length=10, null=True, blank=True, validators=[validate_phone_number])
     avatar = models.ImageField(upload_to='uploads/%Y/%m', default=None, null=True, blank=True) 
-    # groups = models.ManyToManyField(
-    #     'auth.Group',
-    #     related_name='custom_user_set',
-    #     blank=True,
-    #     help_text=('The groups this user belongs to. A user will get all permissions granted to each of their groups.'),
-    #     related_query_name='user'
-    # )
-    # user_permissions = models.ManyToManyField(
-    #     'auth.Permission',
-    #     related_name='custom_user_set',
-    #     blank=True,
-    #     help_text=('Specific permissions for this user.'),
-    #     related_query_name='user'
-    # )
-    # idRole = models.ForeignKey(Role, related_name="Users", on_delete= models.SET_NULL, null=True,blank=False)
-    # USER_TYPE_CHOICES = (
-    #     ('customer', 'Customer'),
-    #     ('driver', 'Driver'),
-    # )
-    # user_type = models.CharField(max_length=10, choices=USER_TYPE_CHOICES, default='customer')
-
+    
 class Customer(User):
     class Meta:
         ordering=["id"]
@@ -100,12 +63,11 @@ class Type(models.Model):
     def __str__(self) :
          return self.name
     
-# Route - ID - START POINT- END POINT- Departure Date (ngày giờ) - FK TICKET
+
 class Route(ItemBase):
     class Meta: 
         ordering=["id"]
-        # unique_together=["startPoint"]
-        unique_together = ("startPoint", "endPoint")  # Thêm ràng buộc unique
+        unique_together = ("startPoint", "endPoint")  
 
     VIETNAM_PROVINCES = [
     ('Hà Nội', 'Hà Nội'),
@@ -188,8 +150,6 @@ class Trip(ItemBase):
     class Meta: 
         ordering=["id"]
         unique_together = ('departure_Station','departure_Time','id_Buses')
-        # unique_together = ('id_Buses', 'departure_Time')
-        # unique_together =('id','id_Buses')
     POSITION = [
    ('Gas Hà Nội,21.0285,105.8542', 'Gas Hà Nội'),
     ('Gas Hà Giang,22.3255,104.4660', 'Gas Hà Giang'),
@@ -242,15 +202,13 @@ class Trip(ItemBase):
     ('Gas Bạc Liêu,9.2950,105.7117', 'Gas Bạc Liêu'),
     ('Gas Cà Mau,9.1750,105.1500', 'Gas Cà Mau')
    ]
-    price = models.FloatField(validators=[MinValueValidator(50), MaxValueValidator(200)],default=50)  # Giới hạn giá trị từ 50 đến 200
+    price = models.FloatField(validators=[MinValueValidator(50), MaxValueValidator(200)],default=50)  
     distance = models.FloatField(validators=[MinValueValidator(0), MaxValueValidator(3000)],default=0)
-    # departure_Station = models.CharField(max_length =100, null = False, blank=False)
     departure_Station = models.CharField(
         max_length=100,
         choices=POSITION,
         default='Gas Đà Lạt,11.6684,108.5402' 
     )
-    # ending_Station = models.CharField(max_length =100, null = False, blank=False)
     ending_Station = models.CharField(
         max_length=100,
         choices=POSITION,
@@ -258,57 +216,45 @@ class Trip(ItemBase):
     )
     departure_Time = models.DateTimeField(null=False, blank=False,default=timezone.now)
     arrival_Time = models.DateTimeField(null=False, blank=False, default=timezone.now)
-    hours = models.CharField(max_length=20, blank=True, null=True)  # Trường để lưu giờ
+    hours = models.CharField(max_length=20, blank=True, null=True)  
     total_Seats = models.IntegerField(default=34)
     reserved_Seats = models.IntegerField(default=0)
 
     id_Route = models.ForeignKey(Route, related_name= "trip",on_delete= models.SET_NULL, null=True)
     id_Buses= models.ForeignKey('Bus', related_name="trip", on_delete= models.SET_NULL, null=True, blank=True, default=None)
     def name(self):
-        departure_name = self.departure_Station.split(',')[0]  # Chỉ lấy phần tên trước dấu phẩy
-        ending_name = self.ending_Station.split(',')[0]  # Chỉ lấy phần tên trước dấu phẩy
+        departure_name = self.departure_Station.split(',')[0]  
+        ending_name = self.ending_Station.split(',')[0]  
         return f"{departure_name} - {ending_name}"
     def departure_name(self):
-        departure_name = self.departure_Station.split(',')[0]  # Chỉ lấy phần tên trước dấu phẩy
+        departure_name = self.departure_Station.split(',')[0]  
         return departure_name
     def ending_name(self):
-        ending_name = self.ending_Station.split(',')[0]  # Chỉ lấy phần tên trước dấu phẩy
+        ending_name = self.ending_Station.split(',')[0] 
         return ending_name
 
     def __str__(self) :
         return f"{self.departure_name()} - {self.ending_name()}"
     @staticmethod
     def haversine(lat1, lon1, lat2, lon2):
-        # Chuyển đổi từ độ sang radian
         lat1, lon1, lat2, lon2 = map(math.radians, [lat1, lon1, lat2, lon2])
-        
-        # Tính sự chênh lệch
         dlat = lat2 - lat1
-        dlon = lon2 - lon1
-        
-        # Áp dụng công thức Haversine
+        dlon = lon2 - lon1    
         a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2)**2
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
-        # Bán kính của Trái Đất (km)
         R = 6371
-        
-        # Tính khoảng cách
         distance = R * c
         return distance
     @staticmethod
     def get_coordinates(station_value):
         for value, label in Trip.POSITION:
             if station_value == value:
-                coords = value.split(',')[1:]  # Lấy phần tọa độ từ chuỗi
+                coords = value.split(',')[1:]  
                 lat = float(coords[0])
                 lon = float(coords[1])
                 return lat, lon
         return None, None   
     def save(self, *args, **kwargs):
-        # if self.id_Buses:
-        #     self.total_Seats = self.id_Buses.total_Seats  # Assign Bus's total seats
-        # self.reserved_Seats = Ticket.objects.filter(idTrip=self, status=True).count()
-
         if self.departure_Time is None or self.arrival_Time is None:
             raise ValidationError("Departure time and Arrival time cannot be None.")
         
@@ -318,19 +264,11 @@ class Trip(ItemBase):
             minutes, _ = divmod(remainder, 60)
             self.hours = f"{hours:02d}:{minutes:02d}"
         if self.departure_Station and self.ending_Station:
-            # Lấy tọa độ từ giá trị trong danh sách POSITION
             dep_lat, dep_lon = self.get_coordinates(self.departure_Station)
             end_lat, end_lon = self.get_coordinates(self.ending_Station)
-            
-            # print(f"Departure Coordinates: {dep_lat}, {dep_lon}")
-            # print(f"Ending Coordinates: {end_lat}, {end_lon}")
-
             if dep_lat is not None and dep_lon is not None and end_lat is not None and end_lon is not None:
                 self.distance = self.haversine(dep_lat, dep_lon, end_lat, end_lon)
                 self.distance = round(self.distance, 2)
-                # print(f"Calculated Distance: {self.distance}")
-
-
         super().save(*args, **kwargs)
 
         if self.id_Buses and self.pk:
@@ -349,7 +287,6 @@ class Trip(ItemBase):
                 driver.totalDrivingTime += total_hours
                 driver.totalSalary += self.distance / 50 * 10
                 driver.save()
-                 # Lưu thông tin lương vào bảng Salary
                 month = self.departure_Time.date().replace(day=1)
                 salary, created = Salary.objects.get_or_create(
                     month=month,
@@ -366,7 +303,7 @@ class Trip(ItemBase):
                 with transaction.atomic():
                     seatNumber = SeatNumber.objects.get(idBus=self.id_Buses, seat_number=i)
                     Ticket.objects.create(
-                        name=unique_ticket_name,  # Đảm bảo tên ticket là duy nhất
+                        name=unique_ticket_name, 
                         idTrip=self,
                         idSeatNumber=seatNumber,
                         status=False,
@@ -379,11 +316,10 @@ class Trip(ItemBase):
         super().save(*args, **kwargs)
 
 
-# BUS -  ID- NAME - TÌNH TRẠNG XE - TỔNG SỐ GHẾ - bến xe đi - bến xe đến - GHẾ ĐÃ ĐẶT - FK acc
 class Bus(ItemBase):
         class Meta: 
             ordering=["id"]
-            db_table = 'Buses'  # Đặt tên bảng là "Buses"
+            # db_table = 'Buses'  
             unique_together=['vehycle_number']
         vehycle_number=models.CharField(null=False, blank=False, max_length=8)
         idType = models.ForeignKey(Type,related_name='Buss', on_delete= models.SET_NULL, null=True,blank=False)
@@ -391,7 +327,7 @@ class Bus(ItemBase):
         id_Driver = models.ForeignKey(
                     Driver, 
                     on_delete= models.SET_NULL, null=True,
-                    limit_choices_to={'bus__isnull': True}  # Chỉ hiển thị Driver chưa có trong Bus
+                    limit_choices_to={'bus__isnull': True} 
                 )    
         def __str__(self):
             return str(self.vehycle_number)
@@ -399,64 +335,47 @@ class Bus(ItemBase):
 
         def save(self, *args, **kwargs):                
             if self.pk:
-                # Nếu Bus đã tồn tại, xóa các ghế cũ của nó
                 SeatNumber.objects.filter(idBus=self).delete()
             super().save(*args, **kwargs)
             
             for i in range(1, 34 + 1):
                 SeatNumber.objects.create(idBus=self, seat_number=i)
 
-
-
-
-
-    
-
-#SEAT NUMBER -id - des - fk idBus
 class SeatNumber(models.Model):
     class Meta: 
         ordering=["id"]
         unique_together = ('seat_number','idBus')
     idBus = models.ForeignKey(Bus, related_name='seatNumber', on_delete=models.CASCADE, null=False, blank=False)
     seat_number = models.IntegerField()
-   
-
     def __str__(self) :
       return str(self.idBus)  + "-" + str(self.seat_number)
     def seatNumber(self):
         return str(self.seat_number)
 
-
-
-#TICKET - ID - NAME - HOURS - STATUS  - PRICE - FK (seat number, trip, type, bus)
 class Ticket(ItemBase):
     class Meta: 
         ordering=["id"]
     name = models.CharField(max_length=100, null=False, unique=True)
     img = models.ImageField(upload_to='ticket/%Y/%m', default=None, null=True, blank=True)
     status = models.BooleanField(default=False) 
-    # idSeatNumber = models.ForeignKey(SeatNumber, related_name='Tickets',on_delete=models.CASCADE)
     idSeatNumber = models.ForeignKey(
             SeatNumber, 
             related_name='Tickets',
             on_delete=models.CASCADE,
-            limit_choices_to={'seat_number__isnull': True}  # Chỉ hiển thị seatNumber chưa có trong Ticket
+            limit_choices_to={'seat_number__isnull': True}  
     )   
     idTrip = models.ForeignKey(Trip,related_name='Tickets', on_delete=models.CASCADE, null=True,blank=True)
     def __str__(self) :
          return str(self.id)
     def update_status(self):
-        # Kiểm tra xem có booking nào liên quan đến Ticket không
         has_booking = Booking.objects.filter(idTicket=self).exists() 
-        # Cập nhật trạng thái của Ticket dựa trên sự tồn tại của booking
         self.status = has_booking
-        self.save()  # Lưu lại Ticket để cập nhật trạng thái
+        self.save()  
     
-# BOOKING - id - bookingDate - status - FK (ticket, acc)
+
 class Booking(models.Model):
     class Meta: 
         ordering=["id"]
-        # unique_together = ('idTicket','idBooking')
     name_Customer = models.CharField(max_length=100, null= False, blank=False)
     phone_Customer = models.CharField(max_length=10, null=True, blank=True, validators=[validate_phone_number])
     bookingDate = models.DateTimeField(auto_now_add=True)
@@ -466,57 +385,31 @@ class Booking(models.Model):
             on_delete=models.SET_NULL,
             null=True,
             blank=True,
-            limit_choices_to={'booking__isnull': True}  # Chỉ hiển thị Ticket chưa có trong Booking
+            limit_choices_to={'booking__isnull': True} 
         )    
     idCustomer = models.ForeignKey(Customer, related_name='Booking', on_delete= models.SET_NULL, null=True, blank=True)
     def __str__(self):
         return str(self.idTicket) + " of "+ str(self.idCustomer)
-    
-    
     def save(self, *args, **kwargs):
         old_ticket = None
         if self.id:
-            old_ticket = self.__class__.objects.get(pk=self.pk).idTicket  # Lấy vé cũ trước khi lưu
-            print(1)
+            old_ticket = self.__class__.objects.get(pk=self.pk).idTicket
         super().save(*args, **kwargs)
         if old_ticket:
-            old_ticket.status = False  # Đặt status của vé cũ là False
+            old_ticket.status = False 
             old_ticket.save()
-            print(2)
         if self.idTicket:
-            self.idTicket.status = True  # Set status of new ticket to True
+            self.idTicket.status = True 
             self.idTicket.save()
-
-
         self.update_trip_reserved_seats()
-
-
     def delete(self, *args, **kwargs):  
         super().delete(*args, **kwargs)
         self.update_trip_reserved_seats()
-        print(3)
 
     def update_trip_reserved_seats(self):
         if self.idTicket:
             self.idTicket.idTrip.reserved_Seats = Ticket.objects.filter(idTrip=self.idTicket.idTrip, status=True).count()
             self.idTicket.idTrip.save()
-            print(4)
-
-
-    
-
-# class Feedback(models.Model):
-#     class Meta: 
-#         ordering = ["id"]
-#     content = models.CharField(max_length=500, null=False, blank=False)
-#     feedback_date = models.DateTimeField(auto_now_add=True)
-#     idBooking = models.ForeignKey(Booking, related_name='feedbacks', on_delete=models.CASCADE, null=False, blank=False)
-#     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # Thêm trường này để lưu trữ thông tin người dùng
-
-    
-    
-#     def __str__(self):
-#         return f"Feedback for Booking {self.idBooking.id}"
 
 class Feedback(models.Model):
     class Meta: 
@@ -524,30 +417,24 @@ class Feedback(models.Model):
     content = models.CharField(max_length=500, null=False, blank=False)
     feedback_date = models.DateTimeField(auto_now_add=True)
     idTrip = models.ForeignKey(Trip, related_name='feedbacks', on_delete=models.CASCADE, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)  # Lưu trữ thông tin người dùng
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) 
     
     def __str__(self):
         trip_info = f"Trip {self.idTrip.id}" if self.idTrip else "No Trip"
         user_info = self.user.username if self.user else "Unknown User"
         return f"Feedback for {trip_info} by {user_info}"
     
-from django.contrib.auth import login
 
 def create_customer(backend, user, response, *args, **kwargs):
-    # Kiểm tra xem khách hàng đã tồn tại chưa
     if not Customer.objects.filter(id=user.id).exists():
-        # Tạo khách hàng mới nếu chưa tồn tại
         Customer.objects.create(
             id=user.id,
             username=user.username,
             email=user.email,
             avatar=user.avatar,
             phone_Number=user.phone_Number,
-            point=0,  # Đặt giá trị mặc định cho point
+            point=0, 
         )
-
-    # Đăng nhập người dùng sau khi tạo khách hàng
-    # Cung cấp tham số backend để Django biết phải sử dụng backend nào
     login(backend.strategy.request, user, backend='social_core.backends.google.GoogleOAuth2')
 
 

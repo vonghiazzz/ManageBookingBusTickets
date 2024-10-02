@@ -16,13 +16,9 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Thời gian session tồn tại tính bằng giây (ở đây là 6 phút)
 SESSION_COOKIE_AGE = 3600
-
-# Xóa session khi đóng trình duyệt
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-SESSION_SAVE_EVERY_REQUEST = True  # Gia hạn thời gian hết hạn session mỗi khi người dùng gửi request mới
+SESSION_SAVE_EVERY_REQUEST = True  
 
 
 # Quick-start development settings - unsuitable for production
@@ -49,23 +45,18 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
-    # 'ckeditor',
-    # 'ckeditor_uploader',
-
     'app',
     'oauth2_provider',
-
     'social_django',
-
 ]
 
 #Send email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # SMTP server của nhà cung cấp email của bạn
-EMAIL_PORT = 587  # Cổng SMTP
-EMAIL_USE_TLS = True  # Sử dụng TLS
-EMAIL_HOST_USER = 'martbus.office@gmail.com'  # Địa chỉ email của bạn
-EMAIL_HOST_PASSWORD = 'pvic dqgw rfiy adta'  # Mật khẩu email của bạn
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_PORT = 587  
+EMAIL_USE_TLS = True  
+EMAIL_HOST_USER = 'martbus.office@gmail.com' 
+EMAIL_HOST_PASSWORD = 'pvic dqgw rfiy adta'  
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
@@ -82,8 +73,8 @@ MIDDLEWARE = [
     # #Login with google
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
-    # Update to Error
-    # 'app.middleware.CustomErrorMiddleware',
+    # Show error of middleware
+    'app.middleware.CustomErrorMiddleware',
 
 ]
 
@@ -173,7 +164,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-import os
 
 STATIC_URL = 'static/'
 
@@ -181,13 +171,6 @@ MEDIA_ROOT = '%s/app/static/' % BASE_DIR
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'app/static/media')
-
-
-#Upload của ckEditor = MEDIA_ROOT + CKEDITOR_UPLOAD_PATH
-# CKEDITOR_UPLOAD_PATH='bus/'
-
-
-
 
 
 # Default primary key field type
@@ -230,8 +213,8 @@ SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.auth_allowed',
     'social_core.pipeline.social_auth.social_user',
     'social_core.pipeline.user.get_username',
-    'social_core.pipeline.user.create_user',  # Tạo User mới
-    'app.models.create_customer',  # Thêm khách hàng sau khi tạo User
+    'social_core.pipeline.user.create_user',  
+    'app.models.create_customer',  
     'social_core.pipeline.social_auth.associate_user',
     'social_core.pipeline.social_auth.load_extra_data',
     'social_core.pipeline.user.user_details',
