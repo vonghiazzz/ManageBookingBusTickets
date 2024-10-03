@@ -649,26 +649,22 @@ def change_password(request):
     if request.user.is_authenticated:
         user_not_login = "hidden"
         user_login = "show"
-        form = PasswordChangeForm(request.user)  # Form dành cho người dùng đã đăng nhập
+        form = PasswordChangeForm(request.user)  
     else:
         user_not_login = "show"
         user_login = "hidden"
-        form = SetPasswordForm(None)  # Form đặt lại mật khẩu cho người dùng chưa đăng nhập
-
-    # Khởi tạo context để truyền vào template
+        form = SetPasswordForm(None)  
     context = {
         'user_not_login': user_not_login,
         'user_login': user_login,
-        'form': form,  # Thêm form vào context
+        'form': form,  
     }
-
     if request.method == 'POST':
         otp_from_user = request.POST.get('otp', '')
         if otp_from_user:
             if 'otp' in request.session and request.session['otp'] == otp_from_user:
                 new_password1 = request.POST.get('new_password1')
                 new_password2 = request.POST.get('new_password2')
-
                 if new_password1 == new_password2:
                     email = request.session.get('email')
                     if request.user.is_authenticated:
@@ -679,12 +675,8 @@ def change_password(request):
                         except User.DoesNotExist:
                             messages.error(request, 'No user is associated with this email.')
                             return redirect('forget_password')
-
-                    # Đặt lại mật khẩu cho người dùng
                     user.set_password(new_password1)
                     user.save()
-
-                    # Nếu người dùng đã đăng nhập, xác thực lại
                     if request.user.is_authenticated:
                         updated_user = authenticate(username=user.username, password=new_password1)
                         if updated_user is not None:
@@ -692,16 +684,12 @@ def change_password(request):
                     else:                    
                         messages.success(request, 'You have changed your password successfully!')
                         return redirect('login')
-
-                    # Thông báo thành công và điều hướng
                     messages.success(request, 'You have changed your password successfully!')
                     return redirect('profile')
                 else:
                     messages.error(request, 'Passwords do not match.')
             else:
                 messages.error(request, 'Invalid OTP. Please try again.')
-
-    # Trả về trang `change_password.html` với context
     return render(request, 'app/change_password.html', context)
 
 
@@ -993,9 +981,6 @@ def booking(request, trip_id):
     }
     return render(request, 'app/customer/booking.html', context)
 
-def momo_return(request):
-    return redirect('home')
-
 
 def send_email_booking(name, mobile, booked_tickets, user_email):
     subject = 'Successful Booking'
@@ -1007,6 +992,8 @@ def send_email_booking(name, mobile, booked_tickets, user_email):
     except Exception as e:
         return False
     
+def momo_return(request):
+    return redirect('home')
 def generate_momo_payment_url( amount):
     endpoint = "https://test-payment.momo.vn/v2/gateway/api/create"
     accessKey = "F8BBA842ECF85"
