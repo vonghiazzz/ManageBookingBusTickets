@@ -74,7 +74,7 @@ MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
 
     # Show error of middleware
-    # 'app.middleware.CustomErrorMiddleware',
+    'app.middleware.CustomErrorMiddleware',
 
 ]
 
