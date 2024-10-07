@@ -28,28 +28,28 @@
             function initializeCharts(routeNames, currentMonthRevenue, currentMonthBookings, currentMonthTotal) {
                 Highcharts.chart('container-total', {
                     chart: { type: 'column' },
-                    title: { text: 'Tổng thu nhập của tháng hiện tại' },
-                    xAxis: { categories: ['Doanh thu'] },
-                    yAxis: { min: 0, title: { text: 'Tiền ($)' } },
-                    series: [{ name: 'Tháng hiện tại ($)', data: [currentMonthTotal] }],
+                    title: { text: 'Total income for the current month' },
+                    xAxis: { categories: ['Revenue'] },
+                    yAxis: { min: 0, title: { text: 'Dollar ($)' } },
+                    series: [{ name: 'Current month ($)', data: [currentMonthTotal] }],
                     exporting: { enabled: true }
                 });
     
                 Highcharts.chart('container-bookings', {
                     chart: { type: 'column' },
-                    title: { text: 'Số lượng đặt chỗ trong tháng này' },
-                    xAxis: { categories: routeNames, title: { text: 'Lộ trình' } },
-                    yAxis: { min: 0, title: { text: 'Số lượng đặt chỗ' } },
-                    series: [{ name: 'Số lượng đặt chỗ tháng này', data: currentMonthBookings }],
+                    title: { text: 'Number of bookings this month' },
+                    xAxis: { categories: routeNames, title: { text: 'Route' } },
+                    yAxis: { min: 0, title: { text: 'Number of bookings' } },
+                    series: [{ name: 'Number of bookings this month', data: currentMonthBookings }],
                     exporting: { enabled: true }
                 });
     
                 Highcharts.chart('container-revenue', {
                     chart: { type: 'line' },
-                    title: { text: 'Doanh thu theo lộ trình' },
-                    xAxis: { categories: routeNames, title: { text: 'Lộ trình' } },
+                    title: { text: 'Revenue by route' },
+                    xAxis: { categories: routeNames, title: { text: 'Route' } },
                     yAxis: { min: 0, title: { text: 'Doanh thu' } },
-                    series: [{ name: 'Doanh thu tháng này', data: currentMonthRevenue }],
+                    series: [{ name: 'Number of bookings this month', data: currentMonthRevenue }],
                     exporting: { enabled: true }
                 });
             }
