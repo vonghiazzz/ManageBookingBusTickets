@@ -1,4 +1,3 @@
-<!-- templates/admin/custom_admin.html -->
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
@@ -10,11 +9,18 @@
             gap: 10px; 
         }
         .custom-buttons .changelink {
-            padding: 5px 10px;
-            background-color: white;
-            border: 1px solid #ccc;
+            padding: 10px 15px;
+            background-color: white; 
+            border: 1px solid #0056b3;
             border-radius: 4px;
             text-decoration: none;
+            color: #007bff;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .custom-buttons .changelink:hover {
+            background-color: #0056b3; 
         }
     </style>
 {% endblock %}
@@ -24,10 +30,9 @@
     <div class="module">
         <div class="custom-buttons">
             <a href="{% url 'home' %}" class="changelink">{% trans "Back home of website" %}</a>
-            <a href="{% url 'feedbackAdmin' %}" class="changelink">{% trans "FeedBack" %}</a>
+            <a href="{% url 'feedbackAdmin' %}" class="changelink">{% trans "Feedback" %}</a>
             <a href="{% url 'statistics' %}" class="changelink">{% trans "Statistics" %}</a>
             <a href="{% url 'scheduleDriver' %}" class="changelink">{% trans "Schedule Driver" %}</a>
-
         </div>
     </div>
 {% endblock %}
