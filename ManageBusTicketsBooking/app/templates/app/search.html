@@ -107,6 +107,8 @@
                                 <p class="card-text">Date of Departure: {{ result.trip.departure_Time }}</p>
                                 <p class="card-text">Available Tickets: {{ result.available_tickets }}</p>
                             </a>
+                            <a class="btn btn-outline-secondary add-btn update-cart" style="float: right;" href="{% url 'feedback' result.trip.id %}">View Feedback</a>
+
                         </div>
                     </div>
                 </div>
@@ -128,6 +130,7 @@
                                 <p class="card-text">Date of Return: {{ result.trip.departure_Time }}</p>
                                 <p class="card-text">Available Tickets: {{ result.available_tickets }}</p>
                             </a>
+                            <a class="btn btn-outline-secondary add-btn update-cart" style="float: right;" href="{% url 'feedback' result.trip.id %}">View Feedback</a>
                         </div>
                     </div>
                 </div>
