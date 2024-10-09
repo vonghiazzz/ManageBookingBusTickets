@@ -9,6 +9,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.utils.html import mark_safe
 from django.shortcuts import redirect
 from datetime import timedelta
+import logging
+logger = logging.getLogger(__name__)
+
 class CreateCustomerForm(UserCreationForm):
     class Meta:
         model = Customer
@@ -232,18 +235,24 @@ class TripAdminForm(forms.ModelForm):
         model = Trip
         fields = '__all__'
     def clean(self):
+        print("Clean method is called")
         cleaned_data = super().clean()
         startPoint = cleaned_data.get('departure_Station')
         endPoint = cleaned_data.get('ending_Station')
-        id_Buses = cleaned_data.get("idTrip_id_Buses")
+        id_Buses = cleaned_data.get("id_Buses")  # Chỉnh sửa ở đây
         departure_Time = cleaned_data.get("departure_Time")
         arrival_Time = cleaned_data.get("arrival_Time")
         trip_name = f"{startPoint} - {endPoint} - {departure_Time}"
+        logger.info(f"Bus ID: {id_Buses}, Departure: {departure_Time}, Arrival: {arrival_Time}")
 
         if Ticket.objects.filter(name__startswith=trip_name).exists():
+            print("Bus ID:", id_Buses)
             raise ValidationError(f"Name of Ticket '{trip_name}' already exists.")
- 
+        print("id_Buses before if:", id_Buses)
+
         if id_Buses:
+            print("Bus ID:", id_Buses)
+            print("Departure:", departure_Time, "Arrival:", arrival_Time)
             overlapping_trips = Trip.objects.filter(
                     id_Buses=id_Buses,
                     departure_Time__lte=arrival_Time + timedelta(hours=1),

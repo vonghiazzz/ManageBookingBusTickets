@@ -49,6 +49,20 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'social_django',
 ]
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'DEBUG',
+    },
+}
+
 
 #Send email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
