@@ -85,9 +85,12 @@
                       <li>
                         <a class="nav-link" href="{%url 'about_us'%}">About Us</a>
                       </li>
+                      {% if not user.is_superuser %}
                       <li>
-                        <a class="nav-link" href="{%url 'help'%}">Help</a>
+                        <a class="nav-link" href="{% url 'help' %}">Help</a>
                       </li>
+                    {% endif %}
+                    
                     </ul>
                     
                   </div>
