@@ -16,6 +16,11 @@ class CreateCustomerForm(UserCreationForm):
     class Meta:
         model = Customer
         fields = ['username','email','first_name','last_name','password1','password2','phone_Number']
+    def __init__(self, *args, **kwargs):
+        super(CreateCustomerForm, self).__init__(*args, **kwargs)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+        self.fields['phone_Number'].required = True
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if User.objects.filter(email=email).exists():
@@ -239,7 +244,7 @@ class TripAdminForm(forms.ModelForm):
         cleaned_data = super().clean()
         startPoint = cleaned_data.get('departure_Station')
         endPoint = cleaned_data.get('ending_Station')
-        id_Buses = cleaned_data.get("id_Buses")  # Chỉnh sửa ở đây
+        id_Buses = cleaned_data.get("id_Buses") 
         departure_Time = cleaned_data.get("departure_Time")
         arrival_Time = cleaned_data.get("arrival_Time")
         trip_name = f"{startPoint} - {endPoint} - {departure_Time}"
@@ -260,6 +265,8 @@ class TripAdminForm(forms.ModelForm):
                 ).exclude(pk=self.instance.pk)
             if overlapping_trips.exists():
                 raise forms.ValidationError(f"Bus {id_Buses} is assigned to another trip during this period or within 1 hour after the trip.")
+           
+
 
         if startPoint == endPoint:
             raise forms.ValidationError("Start point and end point must be different")
